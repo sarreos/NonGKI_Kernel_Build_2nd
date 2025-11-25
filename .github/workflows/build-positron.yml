@@ -26,7 +26,7 @@ env:
   GCC_32_BRANCH : ""
 
   DEFCONFIG_SOURCE: ""
-  DEFCONFIG_NAME : "vendor/veux-qgki_defconfig"
+  DEFCONFIG_NAME : "veux_defconfig"
   DEFCONFIG_ORIGIN_IMAGE: ""
   DEFCONFIG_FROM_BOOT: false
 
