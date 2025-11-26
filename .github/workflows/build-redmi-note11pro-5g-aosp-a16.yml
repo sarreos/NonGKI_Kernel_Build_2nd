@@ -35,9 +35,9 @@ env:
   KERNELSU_AUTO_GET : "false" # if u want easy setting kernelsu, u can true.
   KERNELSU_AUTO_FORK : "sukisu" # magic, rsuntk, next, wild, jingmatrix and sukisu
 
-  SUSFS_ENABLE : false
-  SUSFS_FIXED : false
-  SUSFS_UPDATE : false
+  SUSFS_ENABLE : true
+  SUSFS_FIXED : true
+  SUSFS_UPDATE : true
 
   AK3_SOURCE : "https://github.com/osm0sis/AnyKernel3.git"
   AK3_BRANCH : "master"
