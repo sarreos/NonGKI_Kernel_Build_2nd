@@ -1946,7 +1946,7 @@ index c5b0c9d..1cdecd1 100644
  /* susfs_init */
  void susfs_init(void);
 diff --git a/include/linux/susfs_def.h b/include/linux/susfs_def.h
-index e414409..32f76c2 100644
+index e414409..16cdc62 100644
 --- a/include/linux/susfs_def.h
 +++ b/include/linux/susfs_def.h
 @@ -7,17 +7,18 @@
@@ -2026,13 +2026,13 @@ index e414409..32f76c2 100644
  
  #define ND_STATE_LOOKUP_LAST 32
  #define ND_STATE_OPEN_LAST 64
-@@ -70,10 +75,8 @@
+@@ -70,10 +75,6 @@
  #define ND_FLAGS_LOOKUP_LAST		0x2000000
  
  #define MAGIC_MOUNT_WORKDIR "/debug_ramdisk/workdir"
 -#define DATA_ADB_UMOUNT_FOR_ZYGOTE_SYSTEM_PROCESS "/data/adb/susfs_umount_for_zygote_system_process"
- #define DATA_ADB_NO_AUTO_ADD_SUS_BIND_MOUNT "/data/adb/susfs_no_auto_add_sus_bind_mount"
- #define DATA_ADB_NO_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT "/data/adb/susfs_no_auto_add_sus_ksu_default_mount"
+-#define DATA_ADB_NO_AUTO_ADD_SUS_BIND_MOUNT "/data/adb/susfs_no_auto_add_sus_bind_mount"
+-#define DATA_ADB_NO_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT "/data/adb/susfs_no_auto_add_sus_ksu_default_mount"
 -#define DATA_ADB_NO_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT "/data/adb/susfs_no_auto_add_try_umount_for_bind_mount"
  
  static inline bool susfs_is_current_proc_umounted(void) {

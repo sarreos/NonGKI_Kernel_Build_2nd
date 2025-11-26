@@ -160,12 +160,16 @@ jobs:
           patch -p1 < sched_blu_pixutil_schedhorizon_and_rcu.patch || true
 
           # Patch USB Video Class Gadget driver
-          wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/uvc.patch
-          patch -p1 < uvc.patch || true
+          # wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/uvc.patch
+          # patch -p1 < uvc.patch || true
 
           # Patch DriveDroid Support
           # wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/drivedroid.patch
           # patch -p1 < drivedroid.patch || true
+
+          # Patch CPU Boost
+          wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/cpu_boost.patch
+          patch -p1 < cpu_boost.patch || true
 
           # Patch Wireguard Fixed
           wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/wireguard_fixed.patch

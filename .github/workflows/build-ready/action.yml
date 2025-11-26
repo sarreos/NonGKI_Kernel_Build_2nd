@@ -106,11 +106,7 @@ runs:
                 KERNELSU_NAME="KernelSU"
                 KERNELSU_ORIGIN_BRANCH="main"
                 if [[ "${{ env.SUSFS_ENABLE }}" == "true" ]]; then
-                    if [[ "${{ env.SUSFS_UPDATE }}" == "true" ]]; then
-                        KERNELSU_BRANCH="susfs-main"
-                    else
-                        KERNELSU_BRANCH="susfs-legacy"
-                    fi
+                    KERNELSU_BRANCH="susfs-rksu-master"
                 else
                     KERNELSU_BRANCH="main"
                 fi
@@ -305,7 +301,7 @@ runs:
 
           # Fork
           if [[ "${{ env.KERNELSU_SOURCE }}" == *rsuntk* ]] || [[ "${{ env.KERNELSU_SOURCE }}" == *SukiSU* ]] || [[ "${{ env.KERNELSU_AUTO_FORK }}" == "sukisu" ]] || [[ "${{ env.KERNELSU_AUTO_FORK }}" == "rsuntk" ]]; then
-            if [[ ${{ env.SUSFS_ENABLE }} == "true" ]] && [[ ${{ env.SUSFS_UPDATE }} == "true" ]] && [ -f "drivers/kernelsu/syscall_hook_manager.c" ] || [ -f "drivers/kernelsu/gki/syscall_hook_manager.c" ]; then
+            if [[ ${{ env.SUSFS_ENABLE }} == "true" ]] && [[ ${{ env.SUSFS_UPDATE }} == "true" ]]; then
                 echo "CONFIG_KSU_MANUAL_HOOK=n" >> ./arch/${{ env.KERNEL_ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
             else
                 echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/${{ env.KERNEL_ARCH }}/configs/${{ env.DEFCONFIG_NAME }}

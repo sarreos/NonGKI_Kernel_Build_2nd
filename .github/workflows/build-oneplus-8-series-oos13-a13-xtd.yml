@@ -29,15 +29,15 @@ env:
   DEFCONFIG_ORIGIN_IMAGE: ""
   DEFCONFIG_FROM_BOOT: false
 
-  KERNELSU_SOURCE : "https://raw.githubusercontent.com/backslashxx/KernelSU/refs/heads/master/kernel/setup.sh"
-  KERNELSU_BRANCH : "12124+155"
+  KERNELSU_SOURCE : ""
+  KERNELSU_BRANCH : ""
 
   KERNELSU_AUTO_GET : "true" # if u want easy setting kernelsu, u can true.
   KERNELSU_AUTO_FORK : "rsuntk" # magic, rsuntk , next and sukisu
 
   SUSFS_ENABLE : true
   SUSFS_FIXED : true
-  SUSFS_UPDATE : false
+  SUSFS_UPDATE : true
 
   AK3_SOURCE : "https://github.com/JackA1ltman/OP8_AnyKernel3.git"
   AK3_BRANCH : "main"

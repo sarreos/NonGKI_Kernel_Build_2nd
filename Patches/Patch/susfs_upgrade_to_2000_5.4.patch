@@ -42,7 +42,7 @@ index 399cc9a..d50d658 100644
  }
  
 diff --git a/fs/namespace.c b/fs/namespace.c
-index d95b481..9a5767a 100644
+index d95b481..c259d64 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
 @@ -30,7 +30,7 @@
@@ -96,7 +96,20 @@ index d95b481..9a5767a 100644
  		goto bypass_orig_flow;
  	}
  orig_flow:
-@@ -2586,23 +2574,6 @@ static int do_loopback(struct path *path, const char *old_name,
+@@ -1188,12 +1176,6 @@ struct vfsmount *vfs_kern_mount(struct file_system_type *type,
+ 	struct vfsmount *mnt;
+ 	int ret = 0;
+ 
+-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+-	struct mount *m;
+-	struct mnt_namespace *mnt_ns;
+-	int mnt_id;
+-#endif
+-
+ 	if (!type)
+ 		return ERR_PTR(-EINVAL);
+ 
+@@ -2586,23 +2568,6 @@ static int do_loopback(struct path *path, const char *old_name,
  		umount_tree(mnt, UMOUNT_SYNC);
  		unlock_mount_hash();
  	}
@@ -120,7 +133,7 @@ index d95b481..9a5767a 100644
  out2:
  	unlock_mount(mp);
  out:
-@@ -3450,12 +3421,6 @@ long do_mount(const char *dev_name, const char __user *dir_name,
+@@ -3450,12 +3415,6 @@ long do_mount(const char *dev_name, const char __user *dir_name,
  		retval = do_new_mount(&path, type_page, sb_flags, mnt_flags,
  				      dev_name, data_page);
  dput_out:
@@ -133,7 +146,7 @@ index d95b481..9a5767a 100644
  	path_put(&path);
  	return retval;
  }
-@@ -3879,12 +3844,6 @@ out_to:
+@@ -3879,12 +3838,6 @@ out_to:
  	path_put(&to_path);
  out_from:
  	path_put(&from_path);
@@ -146,7 +159,7 @@ index d95b481..9a5767a 100644
  
  	return ret;
  }
-@@ -4354,6 +4313,11 @@ void susfs_reorder_mnt_id(void) {
+@@ -4354,6 +4307,11 @@ void susfs_reorder_mnt_id(void) {
  		return;
  	}
  
@@ -158,7 +171,7 @@ index d95b481..9a5767a 100644
  	get_mnt_ns(mnt_ns);
  	first_mnt_id = list_first_entry(&mnt_ns->list, struct mount, mnt_list)->mnt_id;
  	list_for_each_entry(mnt, &mnt_ns->list, mnt_list) {
-@@ -4361,22 +4325,9 @@ void susfs_reorder_mnt_id(void) {
+@@ -4361,22 +4319,9 @@ void susfs_reorder_mnt_id(void) {
  		if (mnt->mnt_id == DEFAULT_KSU_MNT_ID) {
  			continue;
  		}
@@ -2004,7 +2017,7 @@ index c5b0c9d..1cdecd1 100644
  /* susfs_init */
  void susfs_init(void);
 diff --git a/include/linux/susfs_def.h b/include/linux/susfs_def.h
-index e94d558..32f76c2 100644
+index e94d558..16cdc62 100644
 --- a/include/linux/susfs_def.h
 +++ b/include/linux/susfs_def.h
 @@ -7,17 +7,18 @@
@@ -2084,13 +2097,13 @@ index e94d558..32f76c2 100644
  
  #define ND_STATE_LOOKUP_LAST 32
  #define ND_STATE_OPEN_LAST 64
-@@ -71,10 +75,8 @@
+@@ -71,10 +75,6 @@
  #define ND_FLAGS_LOOKUP_LAST		0x2000000
  
  #define MAGIC_MOUNT_WORKDIR "/debug_ramdisk/workdir"
 -#define DATA_ADB_UMOUNT_FOR_ZYGOTE_SYSTEM_PROCESS "/data/adb/susfs_umount_for_zygote_system_process"
- #define DATA_ADB_NO_AUTO_ADD_SUS_BIND_MOUNT "/data/adb/susfs_no_auto_add_sus_bind_mount"
- #define DATA_ADB_NO_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT "/data/adb/susfs_no_auto_add_sus_ksu_default_mount"
+-#define DATA_ADB_NO_AUTO_ADD_SUS_BIND_MOUNT "/data/adb/susfs_no_auto_add_sus_bind_mount"
+-#define DATA_ADB_NO_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT "/data/adb/susfs_no_auto_add_sus_ksu_default_mount"
 -#define DATA_ADB_NO_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT "/data/adb/susfs_no_auto_add_try_umount_for_bind_mount"
  
  static inline bool susfs_is_current_proc_umounted(void) {

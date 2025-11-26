@@ -51,7 +51,7 @@ runs:
             echo "Your kernel source code appears to have been manually patched, so this step is skipped."
 
           # Detect SuSFS is used to enable the SuSFS inline hook
-          elif [[ ${{ env.SUSFS_ENABLE }} == "true" ]] && [[ ${{ env.SUSFS_UPDATE }} == "true" ]] && [ -f "drivers/kernelsu/syscall_hook_manager.c" ] || [ -f "drivers/kernelsu/gki/syscall_hook_manager.c" ]; then
+          elif [[ ${{ env.SUSFS_ENABLE }} == "true" ]] && [[ ${{ env.SUSFS_UPDATE }} == "true" ]] && ! grep -q "AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT" "drivers/kernelsu/Kconfig"; then
             # Core
             cp /tmp/Patches/susfs_inline_hook_patches.sh ./
             bash susfs_inline_hook_patches.sh ./
