@@ -29,8 +29,8 @@ env:
   DEFCONFIG_ORIGIN_IMAGE: ""
   DEFCONFIG_FROM_BOOT: false
 
-  KERNELSU_SOURCE : "https://raw.githubusercontent.com/sarreos/SukiSU-Ultra/refs/heads/susfs-main/kernel/setup.sh"
-  KERNELSU_BRANCH : "susfs-main"
+  KERNELSU_SOURCE : "https://raw.githubusercontent.com/rsuntk/KernelSU/refs/heads/susfs-rksu-master/kernel/setup.sh"
+  KERNELSU_BRANCH : "susfs-rksu-master"
 
   KERNELSU_AUTO_GET : "false" # if u want easy setting kernelsu, u can true.
   KERNELSU_AUTO_FORK : "sukisu" # magic, rsuntk, next, wild, jingmatrix and sukisu
