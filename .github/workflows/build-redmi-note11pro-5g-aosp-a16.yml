@@ -68,7 +68,7 @@ env:
   HOOK_METHOD: "syscall" # Manual hook method ->  syscall and tracepoint.
   HOOK_OLDER: "false" # contain backport older patch and syscall older patch.
 
-  KPM_ENABLE: "true" # Only use it for SukiSU-Ultra.
+  KPM_ENABLE: "false" # Only use it for SukiSU-Ultra.
   KPM_PATCH_SOURCE: "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU_patch/refs/heads/main/kpm/patch_linux" # patch exec file source -> raw.githubusercontent.com/Test/Test/patch .
 
   BASEBAND_GUARD_ENABLE: "false" #if u want prevent unauthorized writes to critical partitions/device nodes.
