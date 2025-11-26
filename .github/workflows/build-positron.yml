@@ -33,7 +33,7 @@ env:
   KERNELSU_SOURCE : "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/refs/heads/susfs-main/kernel/setup.sh"
   KERNELSU_BRANCH : "susfs-main"
 
-  KERNELSU_AUTO_GET : "false" # if u want easy setting kernelsu, u can true.
+  KERNELSU_AUTO_GET : "true" # if u want easy setting kernelsu, u can true.
   KERNELSU_AUTO_FORK : "sukisu" # magic, rsuntk, next, wild, jingmatrix and sukisu
 
   SUSFS_ENABLE : true
