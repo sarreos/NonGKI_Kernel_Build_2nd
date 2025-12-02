@@ -114,7 +114,7 @@ jobs:
       - name: 🔗 Patch for no-kprobe
         uses: ./.github/workflows/patch-no-kprobe
 
-      - name: 🪛 Extra Kernel Options
+      - name: 🪛 Extra Kernel Patches
         run: |
           # Only ${{ env.DEVICE_NAME }} use it.
           cd $GITHUB_WORKSPACE/device_kernel
@@ -155,32 +155,45 @@ jobs:
           wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/zstd_157_to_49.patch
           patch -p1 < zstd_157_to_49.patch || true
 
-          # Patch Blu Scheduitl and Pixel Scheduitl
+          # Patch Blu Scheduitl and Pixel Schedutil
           wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/sched_blu_pixutil_schedhorizon_and_rcu.patch
           patch -p1 < sched_blu_pixutil_schedhorizon_and_rcu.patch || true
 
           # Patch USB Video Class Gadget driver
-          # wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/uvc.patch
-          # patch -p1 < uvc.patch || true
+          wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/uvc.patch
+          patch -p1 < uvc.patch || true
 
           # Patch DriveDroid Support
           # wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/drivedroid.patch
           # patch -p1 < drivedroid.patch || true
 
           # Patch CPU Boost
-          wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/cpu_boost.patch
-          patch -p1 < cpu_boost.patch || true
+          # wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/cpu_boost.patch
+          # patch -p1 < cpu_boost.patch || true
+
+          # Patch Memory Optimize
+          wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/mem_optimize.patch
+          patch -p1 < mem_optimize.patch || true
+
+          # Patch Srandom
+          wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/srandom.patch
+          patch -p1 < srandom.patch || true
 
           # Patch Wireguard Fixed
           wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/mi_kernel/mix2s_evox_a15/wireguard_fixed.patch
           patch -p1 < wireguard_fixed.patch || true
+
+      - name: 🪛 Extra Kernel Options
+        run: |
+          # Only ${{ env.DEVICE_NAME }} use it.
+          cd $GITHUB_WORKSPACE/device_kernel
 
           # Binder
           sed -i '/^CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder"$/d' ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           ## Binderfs
           echo "CONFIG_BINDERFS=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
 
-          # Scheduitl
+          # Schedutil
           echo "CONFIG_CPU_FREQ_GOV_BLU_SCHEDUTIL=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           echo "CONFIG_CPU_FREQ_GOV_PIXUTIL=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           echo "CONFIG_CPU_FREQ_GOV_SCHEDHORIZON=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
@@ -200,6 +213,10 @@ jobs:
           echo "CONFIG_USB_CONFIGFS_F_UVC=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           echo "CONFIG_VIDEO_V4L2=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           echo "CONFIG_VIDEO_DEV=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
+
+          # Srandom
+          sed -i 's/^CONFIG_HW_RANDOM=y$/# CONFIG_HW_RANDOM is not set/' ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
+          sed -i 's/^CONFIG_HW_RANDOM_MSM_LEGACY=y$/CONFIG_SRANDOM=y/' ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
 
           # Block IO Controller
           echo "CONFIG_BLK_CGROUP=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}

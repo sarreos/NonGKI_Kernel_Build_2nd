@@ -149,21 +149,26 @@ index f6d3a24..ec0c9b4 100644
 -}
 -#endif
 diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index 4ed0a5e..119bc5a 100644
+index 4ed0a5e..e731a52 100644
 --- a/fs/proc/fd.c
 +++ b/fs/proc/fd.c
-@@ -60,11 +60,6 @@ static int seq_show(struct seq_file *m, void *v)
- 
+@@ -61,13 +61,13 @@ static int seq_show(struct seq_file *m, void *v)
  #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
  	mnt = real_mount(file->f_path.mnt);
--	if (likely(susfs_is_current_proc_umounted()) &&
+ 	if (likely(susfs_is_current_proc_umounted()) &&
 -				mnt->mnt_id >= DEFAULT_KSU_MNT_ID)
--	{
--		for (; mnt->mnt_id >= DEFAULT_KSU_MNT_ID; mnt = mnt->mnt_parent) { }
--	}
++		mnt->mnt_id >= DEFAULT_KSU_MNT_ID)
+ 	{
+ 		for (; mnt->mnt_id >= DEFAULT_KSU_MNT_ID; mnt = mnt->mnt_parent) { }
+ 	}
  	seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\n",
- 			(long long)file->f_pos, f_flags,
- 			mnt->mnt_id);
+-			(long long)file->f_pos, f_flags,
+-			mnt->mnt_id);
++			   (long long)file->f_pos, f_flags,
++			   mnt->mnt_id);
+ #else
+ 	seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\n",
+ 		   (long long)file->f_pos, f_flags,
 diff --git a/fs/proc_namespace.c b/fs/proc_namespace.c
 index b04b0ad..a7cf3d3 100644
 --- a/fs/proc_namespace.c

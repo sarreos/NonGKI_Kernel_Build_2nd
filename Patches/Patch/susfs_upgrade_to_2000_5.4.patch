@@ -214,21 +214,21 @@ index e902bc0..4d475e4 100644
  {
  	const struct cred *old_cred;
 diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index 2581061..5213af3 100644
+index 2581061..6413492 100644
 --- a/fs/proc/fd.c
 +++ b/fs/proc/fd.c
-@@ -60,41 +60,9 @@ static int seq_show(struct seq_file *m, void *v)
- 		return ret;
+@@ -61,40 +61,13 @@ static int seq_show(struct seq_file *m, void *v)
  #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
  	mnt = real_mount(file->f_path.mnt);
--	if (likely(susfs_is_current_proc_umounted()) &&
+ 	if (likely(susfs_is_current_proc_umounted()) &&
 -				mnt->mnt_id >= DEFAULT_KSU_MNT_ID)
--	{
++		mnt->mnt_id >= DEFAULT_KSU_MNT_ID)
+ 	{
 -		struct path path;
 -		char *pathname = kmalloc(PAGE_SIZE, GFP_KERNEL);
 -		char *dpath;
 -
--		for (; mnt->mnt_id >= DEFAULT_KSU_MNT_ID; mnt = mnt->mnt_parent) { }
+ 		for (; mnt->mnt_id >= DEFAULT_KSU_MNT_ID; mnt = mnt->mnt_parent) { }
 -
 -		if (!pathname) {
 -			goto out_seq_printf;
@@ -249,7 +249,7 @@ index 2581061..5213af3 100644
 -		goto bypass_orig_flow;
 -out_free_pathname:
 -		kfree(pathname);
--	}
+ 	}
 -out_seq_printf:
 -	seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\nino:\t%lu\n",
 -		   (long long)file->f_pos, f_flags,
