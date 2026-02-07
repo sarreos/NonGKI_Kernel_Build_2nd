@@ -607,10 +607,10 @@ index 80b743c..edb0e13 100644
  	return filp;
  }
 diff --git a/fs/namespace.c b/fs/namespace.c
-index d772fe4..cf68353 100644
+index d772fe4..475e744 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
-@@ -27,10 +27,24 @@
+@@ -27,10 +27,23 @@
  #include <linux/bootmem.h>
  #include <linux/task_work.h>
  #include <linux/sched/task.h>
@@ -625,7 +625,6 @@ index d772fe4..cf68353 100644
 +extern bool susfs_is_current_ksu_domain(void);
 +extern bool susfs_is_sdcard_android_data_decrypted;
 +
-+static DEFINE_IDA(susfs_ksu_mnt_group_ida);
 +static atomic64_t susfs_ksu_mounts = ATOMIC64_INIT(0);
 +static int susfs_mnt_group_start = DEFAULT_KSU_MNT_GROUP_ID;
 +
@@ -635,7 +634,7 @@ index d772fe4..cf68353 100644
  /* Maximum number of mounts in a mount namespace */
  unsigned int sysctl_mount_max __read_mostly = 100000;
  
-@@ -120,6 +134,22 @@ retry:
+@@ -120,6 +133,22 @@ retry:
  static void mnt_free_id(struct mount *mnt)
  {
  	int id = mnt->mnt_id;
@@ -658,16 +657,16 @@ index d772fe4..cf68353 100644
  	spin_lock(&mnt_id_lock);
  	ida_remove(&mnt_id_ida, id);
  	if (mnt_id_start > id)
-@@ -136,6 +166,19 @@ static int mnt_alloc_group_id(struct mount *mnt)
+@@ -136,6 +165,19 @@ static int mnt_alloc_group_id(struct mount *mnt)
  {
  	int res;
  
 +#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-+	if (!susfs_is_sdcard_android_data_decrypted && mnt->mnt_id >= DEFAULT_KSU_MNT_ID) {
-+		if (!ida_pre_get(&susfs_ksu_mnt_group_ida, GFP_KERNEL))
++	if (susfs_is_current_ksu_domain()) {
++		if (!ida_pre_get(&mnt_group_ida, GFP_KERNEL))
 +			return -ENOMEM;
-+		// If so, assign a sus mnt_group id DEFAULT_KSU_MNT_GROUP_ID from susfs_ksu_mnt_group_ida
-+		res = ida_get_new_above(&susfs_ksu_mnt_group_ida,
++		// If so, assign a sus mnt_group id DEFAULT_KSU_MNT_GROUP_ID from mnt_group_ida
++		res = ida_get_new_above(&mnt_group_ida,
 +					susfs_mnt_group_start,
 +					&mnt->mnt_group_id);
 +		if (!res)
@@ -678,25 +677,7 @@ index d772fe4..cf68353 100644
  	if (!ida_pre_get(&mnt_group_ida, GFP_KERNEL))
  		return -ENOMEM;
  
-@@ -154,6 +197,17 @@ static int mnt_alloc_group_id(struct mount *mnt)
- void mnt_release_group_id(struct mount *mnt)
- {
- 	int id = mnt->mnt_group_id;
-+#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-+	// If mnt->mnt_group_id >= DEFAULT_KSU_MNT_GROUP_ID, it means 'mnt' is also sus mount,
-+	// then we free the mnt->mnt_group_id from susfs_ksu_mnt_group_ida
-+	if (!susfs_is_sdcard_android_data_decrypted && id >= DEFAULT_KSU_MNT_GROUP_ID) {
-+		ida_remove(&susfs_ksu_mnt_group_ida, id);
-+		if (susfs_mnt_group_start > id)
-+			susfs_mnt_group_start = id;
-+		mnt->mnt_group_id = 0;
-+		return;
-+	}
-+#endif
- 	ida_remove(&mnt_group_ida, id);
- 	if (mnt_group_start > id)
- 		mnt_group_start = id;
-@@ -201,13 +255,119 @@ static void drop_mountpoint(struct fs_pin *p)
+@@ -201,13 +243,119 @@ static void drop_mountpoint(struct fs_pin *p)
  	mntput(&m->mnt);
  }
  
@@ -817,7 +798,7 @@ index d772fe4..cf68353 100644
  		if (err)
  			goto out_free_cache;
  
-@@ -226,6 +386,10 @@ static struct mount *alloc_vfsmnt(const char *name)
+@@ -226,6 +374,10 @@ static struct mount *alloc_vfsmnt(const char *name)
  #else
  		mnt->mnt_count = 1;
  		mnt->mnt_writers = 0;
@@ -828,7 +809,7 @@ index d772fe4..cf68353 100644
  #endif
  		mnt->mnt.data = NULL;
  
-@@ -1035,11 +1199,24 @@ vfs_kern_mount(struct file_system_type *type, int flags, const char *name, void
+@@ -1035,11 +1187,24 @@ vfs_kern_mount(struct file_system_type *type, int flags, const char *name, void
  {
  	struct mount *mnt;
  	struct dentry *root;
@@ -854,7 +835,7 @@ index d772fe4..cf68353 100644
  	if (!mnt)
  		return ERR_PTR(-ENOMEM);
  
-@@ -1065,6 +1242,7 @@ vfs_kern_mount(struct file_system_type *type, int flags, const char *name, void
+@@ -1065,6 +1230,7 @@ vfs_kern_mount(struct file_system_type *type, int flags, const char *name, void
  	mnt->mnt.mnt_sb = root->d_sb;
  	mnt->mnt_mountpoint = mnt->mnt.mnt_root;
  	mnt->mnt_parent = mnt;
@@ -862,7 +843,7 @@ index d772fe4..cf68353 100644
  	lock_mount_hash();
  	list_add_tail(&mnt->mnt_instance, &root->d_sb->s_mounts);
  	unlock_mount_hash();
-@@ -1093,8 +1271,33 @@ static struct mount *clone_mnt(struct mount *old, struct dentry *root,
+@@ -1093,8 +1259,33 @@ static struct mount *clone_mnt(struct mount *old, struct dentry *root,
  	struct super_block *sb = old->mnt.mnt_sb;
  	struct mount *mnt;
  	int err;
@@ -897,7 +878,7 @@ index d772fe4..cf68353 100644
  	if (!mnt)
  		return ERR_PTR(-ENOMEM);
  
-@@ -1146,6 +1349,7 @@ static struct mount *clone_mnt(struct mount *old, struct dentry *root,
+@@ -1146,6 +1337,7 @@ static struct mount *clone_mnt(struct mount *old, struct dentry *root,
  	mnt->mnt.mnt_root = dget(root);
  	mnt->mnt_mountpoint = mnt->mnt.mnt_root;
  	mnt->mnt_parent = mnt;
@@ -905,7 +886,7 @@ index d772fe4..cf68353 100644
  	lock_mount_hash();
  	list_add_tail(&mnt->mnt_instance, &sb->s_mounts);
  	unlock_mount_hash();
-@@ -1854,7 +2058,7 @@ struct mount *copy_tree(struct mount *mnt, struct dentry *dentry,
+@@ -1854,7 +2046,7 @@ struct mount *copy_tree(struct mount *mnt, struct dentry *dentry,
  					int flag)
  {
  	struct mount *res, *p, *q, *r, *parent;
@@ -914,7 +895,7 @@ index d772fe4..cf68353 100644
  	if (!(flag & CL_COPY_UNBINDABLE) && IS_MNT_UNBINDABLE(mnt))
  		return ERR_PTR(-EINVAL);
  
-@@ -1870,6 +2074,7 @@ struct mount *copy_tree(struct mount *mnt, struct dentry *dentry,
+@@ -1870,6 +2062,7 @@ struct mount *copy_tree(struct mount *mnt, struct dentry *dentry,
  	p = mnt;
  	list_for_each_entry(r, &mnt->mnt_mounts, mnt_child) {
  		struct mount *s;
@@ -922,7 +903,7 @@ index d772fe4..cf68353 100644
  		if (!is_subdir(r->mnt_mountpoint, dentry))
  			continue;
  
-@@ -1899,6 +2104,7 @@ struct mount *copy_tree(struct mount *mnt, struct dentry *dentry,
+@@ -1899,6 +2092,7 @@ struct mount *copy_tree(struct mount *mnt, struct dentry *dentry,
  			q = clone_mnt(p, p->mnt.mnt_root, flag);
  			if (IS_ERR(q))
  				goto out;
@@ -930,7 +911,7 @@ index d772fe4..cf68353 100644
  			lock_mount_hash();
  			list_add_tail(&q->mnt_list, &res->mnt_list);
  			attach_mnt(q, parent, p->mnt_mp);
-@@ -3059,6 +3265,9 @@ struct mnt_namespace *copy_mnt_ns(unsigned long flags, struct mnt_namespace *ns,
+@@ -3059,6 +3253,9 @@ struct mnt_namespace *copy_mnt_ns(unsigned long flags, struct mnt_namespace *ns,
  	copy_flags = CL_COPY_UNBINDABLE | CL_EXPIRE;
  	if (user_ns != ns->user_ns)
  		copy_flags |= CL_SHARED_TO_SLAVE | CL_UNPRIVILEGED;
@@ -940,7 +921,7 @@ index d772fe4..cf68353 100644
  	new = copy_tree(old, old->mnt.mnt_root, copy_flags);
  	if (IS_ERR(new)) {
  		namespace_unlock();
-@@ -3076,6 +3285,7 @@ struct mnt_namespace *copy_mnt_ns(unsigned long flags, struct mnt_namespace *ns,
+@@ -3076,6 +3273,7 @@ struct mnt_namespace *copy_mnt_ns(unsigned long flags, struct mnt_namespace *ns,
  	p = old;
  	q = new;
  	while (p) {
@@ -948,7 +929,7 @@ index d772fe4..cf68353 100644
  		q->mnt_ns = new_ns;
  		new_ns->mounts++;
  		if (new_fs) {
-@@ -3095,6 +3305,7 @@ struct mnt_namespace *copy_mnt_ns(unsigned long flags, struct mnt_namespace *ns,
+@@ -3095,6 +3293,7 @@ struct mnt_namespace *copy_mnt_ns(unsigned long flags, struct mnt_namespace *ns,
  		while (p->mnt.mnt_root != q->mnt.mnt_root)
  			p = next_mnt(p, old);
  	}
@@ -956,7 +937,7 @@ index d772fe4..cf68353 100644
  	namespace_unlock();
  
  	if (rootmnt)
-@@ -3635,3 +3846,33 @@ const struct proc_ns_operations mntns_operations = {
+@@ -3635,3 +3834,33 @@ const struct proc_ns_operations mntns_operations = {
  	.install	= mntns_install,
  	.owner		= mntns_owner,
  };
