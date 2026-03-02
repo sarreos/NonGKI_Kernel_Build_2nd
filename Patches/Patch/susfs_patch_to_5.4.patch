@@ -12,7 +12,7 @@ index 1c949ac..b3282ad 100644
  obj-y +=	buffer.o block_dev.o direct-io.o mpage.o
  else
 diff --git a/fs/namei.c b/fs/namei.c
-index fd6caf2..d992085 100644
+index fd6caf2..748aeae 100644
 --- a/fs/namei.c
 +++ b/fs/namei.c
 @@ -39,6 +39,10 @@
@@ -350,7 +350,7 @@ index fd6caf2..d992085 100644
 +#ifdef CONFIG_KSU_SUSFS_SUS_PATH
 +	int error;
 +
-+	if (dentry->d_inode && unlikely(test_bit(AS_FLAGS_SUS_PATH, &(dentry->d_inode->i_mapping->flags)) && likely(susfs_is_current_proc_umounted())) {
++	if (dentry->d_inode && unlikely(test_bit(AS_FLAGS_SUS_PATH, &dentry->d_inode->i_mapping->flags)) && likely(susfs_is_current_proc_umounted())) {
 +		error = inode_permission(dir->dentry->d_inode, MAY_WRITE | MAY_EXEC);
 +		if (error) {
 +			return error;
@@ -407,7 +407,7 @@ index fd6caf2..d992085 100644
  	if (dentry->d_inode) {
  		/* Cached positive dentry: will open in f_op->open */
 +#ifdef CONFIG_KSU_SUSFS_SUS_PATH
-+		if (unlikely(test_bit(AS_FLAGS_SUS_PATH, &(dentry->d_inode->i_mapping->flags)) && likely(susfs_is_current_proc_umounted())) {
++		if (unlikely(test_bit(AS_FLAGS_SUS_PATH, &dentry->d_inode->i_mapping->flags)) && likely(susfs_is_current_proc_umounted())) {
 +			dput(dentry);
 +			return -ENOENT;
 +		}
@@ -420,7 +420,7 @@ index fd6caf2..d992085 100644
  		if (unlikely(error == -ENOENT) && create_error)
  			error = create_error;
 +#ifdef CONFIG_KSU_SUSFS_SUS_PATH
-+		if (!IS_ERR(dentry) && dentry->d_inode && unlikely(test_bit(AS_FLAGS_SUS_PATH, &(dentry->d_inode->i_mapping->flags)) && likely(susfs_is_current_proc_umounted())) {
++		if (!IS_ERR(dentry) && dentry->d_inode && unlikely(test_bit(AS_FLAGS_SUS_PATH, &dentry->d_inode->i_mapping->flags)) && likely(susfs_is_current_proc_umounted())) {
 +			if (create_error) {
 +				dput(dentry);
 +				return create_error;
@@ -437,7 +437,7 @@ index fd6caf2..d992085 100644
  			dput(dentry);
  			dentry = res;
 +#ifdef CONFIG_KSU_SUSFS_SUS_PATH
-+			if (dentry->d_inode && unlikely(test_bit(AS_FLAGS_SUS_PATH, &(dentry->d_inode->i_mapping->flags)) && likely(susfs_is_current_proc_umounted())) {
++			if (dentry->d_inode && unlikely(test_bit(AS_FLAGS_SUS_PATH, &dentry->d_inode->i_mapping->flags)) && likely(susfs_is_current_proc_umounted())) {
 +				dput(dentry);
 +				return -ENOENT;
 +			}
