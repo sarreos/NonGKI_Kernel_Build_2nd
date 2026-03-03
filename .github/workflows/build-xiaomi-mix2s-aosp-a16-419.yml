@@ -13,7 +13,7 @@ env:
   EXTRA_CMDS : "LLVM=1 LLVM_IAS=1"
 
   KERNEL_SOURCE : "https://github.com/duckyduckG/android_kernel_xiaomi_sdm845_419.git"
-  KERNEL_BRANCH : "lineage-23.0_xiaomi"
+  KERNEL_BRANCH : "lineage-23.2_xiaomi"
 
   CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"
   CLANG_BRANCH : ""
