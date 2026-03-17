@@ -33,7 +33,7 @@ env:
   KERNELSU_BRANCH : "susfs-rksu-master"
 
   KERNELSU_AUTO_GET : "false"
-  KERNELSU_AUTO_FORK : "rsuntk" # magic, rsuntk , next, resukisu and sukisu
+  KERNELSU_AUTO_FORK : "rsuntk" # xxksu, rsuntk , next, resukisu and sukisu
 
   SUSFS_ENABLE : true
   SUSFS_FIXED : true

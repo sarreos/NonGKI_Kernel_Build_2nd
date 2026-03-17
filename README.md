@@ -1,7 +1,7 @@
 <h2 align="center">Non-GKI Kernel Build</h2>
 
 <p align="center">
-  English | <a href="README_cn.md">中文说明</a> | <a href="Supported_list.md">Supported List</a> | <a href="https://github.com/JackA1ltman/NonGKI_Kernel_Build_2nd/wiki">Wiki</a>
+  English | <a href="README_cn.md">中文说明</a> | <a href="Supported_list.md">Supported List</a> | <a href="https://github.com/JackA1ltman/NonGKI_Kernel_Build_2nd/wiki">Wiki</a> | <a href="https://t.me/+9XqfxcDtpkM2ZGE1">Telegram Group</a>
 </p>
 <p align="center">
   <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/JackA1ltman/NonGKI_Kernel_Build_2nd/build-release.yml?branch=mainline&style=for-the-badge"> <img alt="GitHub Downloads (all assets, latest release)" src="https://img.shields.io/github/downloads/JackA1ltman/NonGKI_Kernel_Build_2nd/latest/total?style=for-the-badge">
@@ -72,7 +72,7 @@ It also aims to provide an easier compilation process using **GitHub Actions**, 
 ### Copyright
 - [KernelSU](https://github.com/tiann/KernelSU) - @tiann
   - [rsuntk](https://github.com/rsuntk/KernelSU) - @rsuntk
-  - [Magic](https://github.com/backslashxx/KernelSU) - @backslashxx
+  - [xxksu](https://github.com/backslashxx/KernelSU) - @backslashxx
   - [SukiSU-Ultra](https://github.com/SukiSU-Ultra/SukiSU-Ultra) - @ShirkNeko
     - [ReSukiSU](https://github.com/ReSukiSU/ReSukiSU) - @ReSukiSU Development
   - [Next](https://github.com/KernelSU-Next/KernelSU-Next) - @rifsxd

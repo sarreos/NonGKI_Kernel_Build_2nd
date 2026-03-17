@@ -52,12 +52,12 @@ jobs:
         | Redmi K20 Pro | raphael | 4.14 | Based-AOSP | 15 | AnyKernel3 | SukiSU(U) | ✅ | ❌ | ❌ | ❌ | Inline |
         | Samsung Note 10 Plus | d2s | 4.14 | OneUI 7 | 15 | AnyKernel3 | SukiSU(U) | ✅ | ❌ | ❌ | ❌ | Inline |
         | Xiaomi 11 | venus | 5.4 | Evolution X 11.X | 16 | AnyKernel3 | SukiSU(U) | ✅ | ✅ | ✅ | ❌ | Inline |
-        | Smartisan U3 Pro | osborn | 4.4 | Lineage OS 18 | 11 | AnyKernel3 | Magic | ❌ | ❌ | ❌ | ❌ | Syscall |
+        | Smartisan U3 Pro | osborn | 4.4 | Lineage OS 18 | 11 | AnyKernel3 | xxksu | ❌ | ❌ | ❌ | ❌ | Syscall |
         | Redmi 8 | olive | 4.19 | Based-AOSP | 15 | AnyKernel3 | SukiSU(U) | ✅ | ✅ | ✅ | ✅ | Inline |
         | Redmi Note 7 | lavender | 4.19 | Based-AOSP | 15 | AnyKernel3 | rsuntk | ✅ | ❌ | ❌ | ❌ | Inline |
         | Samsung Note 10 | d1 | 4.14 | OneUI 7 | 15 | AnyKernel3 | SukiSU(U) | ✅ | ❌ | ❌ | ❌ | Inline |
         | Redmi Note 11 Pro 5G | veux | 5.4 | Based-AOSP | 16 | AnyKernel3 | ReSukiSU | ✅ | ❌ | ❌ | ❌ | Inline |
-        | OnePlus 8 | instantnoodle | 4.19 | Color OS 15 | 13 | AnyKernel3 | SukiSU(U) | ✅ | ❌ | ✅ | ✅ | Inline |
+        | OnePlus 8 | instantnoodle | 4.19 | Color OS 15 | 15 | AnyKernel3 | SukiSU(U) | ✅ | ❌ | ✅ | ✅ | Inline |
         | Xiaomi Mix2s | polaris | 4.19 | Based-AOSP | 16 | AnyKernel3 | SukiSU(U) | ✅ | ❌ | ❌ | ❌ | Inline |
         | Nothing Phone (1) | spacewar | 5.4 | Lineage OS 23.0 | 16 | AnyKernel3 | rsuntk | ✅ | ❌ | ❌ | ❌ | Inline |
 
@@ -99,8 +99,8 @@ jobs:
           git push --tags
 
           # Get KernelSU version
-          git clone -b master https://github.com/backslashxx/KernelSU.git KernelSU-Magic
-          KSU_MAGIC_VERSION=$(cd KernelSU-Magic && expr $(/usr/bin/git rev-list --count HEAD) + 10200 - 32)
+          git clone -b master https://github.com/backslashxx/KernelSU.git KernelSU-xxksu
+          KSU_XXKSU_VERSION=$(cd KernelSU-xxksu && expr $(/usr/bin/git rev-list --count HEAD) + 10200 - 32)
           git clone -b main https://github.com/rsuntk/KernelSU.git KernelSU-rsuntk
           KSU_RSUNTK_VERSION=$(cd KernelSU-rsuntk && expr $(/usr/bin/git rev-list --count HEAD) + 10200)
           git clone -b builtin https://github.com/ShirkNeko/SukiSU-Ultra.git KernelSU-SukiSU-Ultra
@@ -113,7 +113,7 @@ jobs:
           # Input release note
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$RELEASE_NOTES" >> $GITHUB_ENV
-          echo "[KernelSU-Magic](https://github.com/backslashxx/KernelSU) Version: $KSU_MAGIC_VERSION  " >> $GITHUB_ENV
+          echo "[KernelSU-xxksu](https://github.com/backslashxx/KernelSU) Version: $KSU_XXKSU_VERSION  " >> $GITHUB_ENV
           echo "[KernelSU-rsuntk](https://github.com/rsuntk/KernelSU) Version: $KSU_RSUNTK_VERSION  " >> $GITHUB_ENV
           echo "[KernelSU-SukiSU-Ultra](https://github.com/ShirkNeko/SukiSU-Ultra) Version: $KSU_SUKISU_ULTRA_VERSION  " >> $GITHUB_ENV
           echo "[KernelSU-Next](https://github.com/KernelSU-Next/KernelSU-Next) Version: $KSU_NEXT_VERSION  " >> $GITHUB_ENV
